@@ -14,9 +14,8 @@ import (
 // to search in the event of a cache miss
 // The type itself implements the autocert.Cache interface
 type LayeredCache struct {
-	layer       autocert.Cache
-	nextLayer   *LayeredCache
-	writePolicy WritePolicy
+	layer     autocert.Cache
+	nextLayer *LayeredCache
 }
 
 // NewCache returns a new layered cache given autocert.Cache implementations

@@ -13,14 +13,14 @@ import (
 // or simply logging events
 type Functional struct {
 	get func(context.Context, string) ([]byte, error)
-	put func(context.Context, string) error
+	put func(context.Context, string, []byte) error
 	del func(context.Context, string) error
 }
 
 // NewFunctional is the constructor for a functional Cert Cache
 func NewFunctional(
 	get func(context.Context, string) ([]byte, error),
-	put func(context.Context, string) error,
+	put func(context.Context, string, []byte) error,
 	del func(context.Context, string) error,
 ) *Functional {
 	return &Functional{
@@ -40,7 +40,7 @@ func (f *Functional) Get(ctx context.Context, key string) ([]byte, error) {
 // Underlying implementations may use any data storage format,
 // as long as the reverse operation, Get, results in the original data.
 func (f *Functional) Put(ctx context.Context, key string, data []byte) error {
-	return f.put(ctx, key)
+	return f.put(ctx, key, data)
 }
 
 // Delete removes a certificate data from the cache under the specified key.

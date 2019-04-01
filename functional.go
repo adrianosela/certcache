@@ -5,12 +5,15 @@ package certcache
 
 import (
 	"context"
+	"log"
+
+	"golang.org/x/crypto/acme/autocert"
 )
 
 // Functional allows the user to use functions to define a cert cache.
 // If we have the get function always return an autocert.ErrCacheMiss error,
 // we can use this cert cache for testing next cache layer's preconditions,
-// or simply logging events
+// or simply logging events (see Newlogger() function)
 type Functional struct {
 	get func(context.Context, string) ([]byte, error)
 	put func(context.Context, string, []byte) error
@@ -28,6 +31,25 @@ func NewFunctional(
 		put: put,
 		del: del,
 	}
+}
+
+// NewLogger is the constructor for a Functional cert cache implementation
+// which does nothing other than log events
+func NewLogger() *Functional {
+	return NewFunctional(
+		func(ctx context.Context, key string) ([]byte, error) {
+			log.Printf("[CERT CACHE] getting key %s", key)
+			return nil, autocert.ErrCacheMiss
+		},
+		func(ctx context.Context, key string, data []byte) error {
+			log.Printf("[CERT CACHE] putting key %s", key)
+			return nil
+		},
+		func(ctx context.Context, key string) error {
+			log.Printf("[CERT CACHE] deleting key %s", key)
+			return nil
+		},
+	)
 }
 
 // Get returns a certificate data for the specified key.

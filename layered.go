@@ -61,13 +61,17 @@ func NewLayeredWithPolicy(wp WritePolicy, layers ...autocert.Cache) *LayeredCach
 // Get returns a certificate data for the specified key.
 // If there's no such key, Get returns ErrCacheMiss.
 func (c *LayeredCache) Get(ctx context.Context, key string) ([]byte, error) {
-	if cert, err := c.layer.Get(ctx, key); err != nil {
-		return cert, nil
+	cert, err := c.layer.Get(ctx, key)
+	if err != nil {
+		if err == autocert.ErrCacheMiss {
+			if c.nextLayer != nil {
+				return c.nextLayer.Get(ctx, key)
+			}
+			return nil, autocert.ErrCacheMiss
+		}
+		return nil, err
 	}
-	if c.nextLayer != nil {
-		return c.nextLayer.Get(ctx, key)
-	}
-	return nil, autocert.ErrCacheMiss
+	return cert, nil
 }
 
 // Put stores the data in the cache under the specified key.

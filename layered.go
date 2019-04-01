@@ -28,7 +28,7 @@ const (
 	// will be for the last layer to be the most persistent e.g. DB call
 	PolicyWriteDeepFirst = WritePolicy("DEEP_FIRST")
 	// PolicyWriteShallowFirst will write to caches starting from the top,
-	// often least persistent, layer e.g. the process heap
+	// often least persistent, layer e.g. a struct in process heap
 	PolicyWriteShallowFirst = WritePolicy("SHALLOW_FIRST")
 )
 

@@ -8,7 +8,10 @@ import (
 	"log"
 
 	"cloud.google.com/go/firestore"
+	"golang.org/x/crypto/acme/autocert"
 	"google.golang.org/api/option"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/codes"
 )
 
 // FirestoreCertCache is a Google Firestore implementation of autocert.Cache
@@ -52,6 +55,9 @@ type format struct {
 func (fcc *FirestoreCertCache) Get(ctx context.Context, key string) ([]byte, error) {
 	docSnapshot, err := fcc.client.Collection(fcc.collectionName).Doc(key).Get(fcc.ctxt)
 	if err != nil {
+		if grpc.Code(err) == codes.NotFound {
+			return nil, autocert.ErrCacheMiss
+		}
 		return nil, err
 	}
 	var doc format

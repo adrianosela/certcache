@@ -64,7 +64,15 @@ func (c *LayeredCache) Get(ctx context.Context, key string) ([]byte, error) {
 	if err != nil {
 		if err == autocert.ErrCacheMiss {
 			if c.nextLayer != nil {
-				return c.nextLayer.Get(ctx, key)
+				byt, err := c.nextLayer.Get(ctx, key)
+				if err != nil {
+					return nil, err
+				}
+				// bring data into current level of cache
+				// we ignore the error since data is
+				// already in a more persistent layer
+				c.layer.Put(ctx, key, byt)
+				return byt, nil
 			}
 			return nil, autocert.ErrCacheMiss
 		}

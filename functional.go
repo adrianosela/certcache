@@ -38,15 +38,15 @@ func NewFunctional(
 func NewLogger() *Functional {
 	return NewFunctional(
 		func(ctx context.Context, key string) ([]byte, error) {
-			log.Printf("[CERT CACHE] getting key %s", key)
+			log.Printf("[certcache] getting key %s", key)
 			return nil, autocert.ErrCacheMiss
 		},
 		func(ctx context.Context, key string, data []byte) error {
-			log.Printf("[CERT CACHE] putting key %s", key)
+			log.Printf("[certcache] putting key %s", key)
 			return nil
 		},
 		func(ctx context.Context, key string) error {
-			log.Printf("[CERT CACHE] deleting key %s", key)
+			log.Printf("[certcache] deleting key %s", key)
 			return nil
 		},
 	)

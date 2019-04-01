@@ -1,6 +1,6 @@
 package certcache
 
-// autocert.Cache Interface implementation as per
+// Implementation of the autocert.Cache interface as per
 // https://godoc.org/golang.org/x/crypto/acme/autocert#Cache
 
 import (

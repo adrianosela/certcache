@@ -10,7 +10,7 @@ import (
 	"golang.org/x/crypto/acme/autocert"
 )
 
-// LayeredCache is an implementation of the autocert.Cache interface
+// LayeredCache is an implementation of the autocert.Cache interface.
 // The behavior of the cache consists in checking itself for hits, and having
 // a fall back storage layer to search in the event of a cache miss
 type LayeredCache struct {
@@ -33,7 +33,6 @@ const (
 )
 
 // NewLayered returns a new layered cache given autocert.Cache implementations
-// this is the default constructor
 func NewLayered(layers ...autocert.Cache) *LayeredCache {
 	if len(layers) == 0 {
 		return nil

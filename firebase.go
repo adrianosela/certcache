@@ -47,7 +47,7 @@ func NewFirestoreCertCacheInCollection(credsPath, projectID, certsCollectionName
 }
 
 type format struct {
-	data string `firestore:"data"`
+	Data string `firestore:"data"`
 }
 
 // Get returns a certificate data for the specified key.
@@ -64,7 +64,7 @@ func (fcc *FirestoreCertCache) Get(ctx context.Context, key string) ([]byte, err
 	if err := docSnapshot.DataTo(&doc); err != nil {
 		return nil, err
 	}
-	return []byte(doc.data), nil
+	return []byte(doc.Data), nil
 }
 
 // Put stores the data in the cache under the specified key.
@@ -72,7 +72,7 @@ func (fcc *FirestoreCertCache) Get(ctx context.Context, key string) ([]byte, err
 // as long as the reverse operation, Get, results in the original data.
 func (fcc *FirestoreCertCache) Put(ctx context.Context, key string, data []byte) error {
 	newDocRef := fcc.client.Collection(fcc.collectionName).Doc(key)
-	_, err := newDocRef.Create(fcc.ctxt, format{data: string(data)})
+	_, err := newDocRef.Create(fcc.ctxt, format{Data: string(data)})
 	return err
 }
 

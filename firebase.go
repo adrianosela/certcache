@@ -72,7 +72,7 @@ func (fcc *FirestoreCertCache) Get(ctx context.Context, key string) ([]byte, err
 // as long as the reverse operation, Get, results in the original data.
 func (fcc *FirestoreCertCache) Put(ctx context.Context, key string, data []byte) error {
 	newDocRef := fcc.client.Collection(fcc.collectionName).Doc(key)
-	_, err := newDocRef.Create(fcc.ctxt, &format{data: string(data)})
+	_, err := newDocRef.Create(fcc.ctxt, format{data: string(data)})
 	return err
 }
 

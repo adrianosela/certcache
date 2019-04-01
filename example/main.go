@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/adrianosela/autocertDB/certcache"
+	"github.com/adrianosela/certcache"
 	"golang.org/x/crypto/acme/autocert"
 )
 
@@ -52,7 +52,8 @@ func getCertManager(cache autocert.Cache, hostnames ...string) *autocert.Manager
 
 func main() {
 	hostnames := []string{
-		/* YOUR DOMAINS HERE */
+		/* YOUR DOMAIN HERE (remove the example) */
+		"certcachetest.adrianosela.com",
 	}
 
 	server := getServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -60,12 +61,7 @@ func main() {
 		w.Write([]byte("server up and running!"))
 	}))
 
-	first := autocert.DirCache(".")
-	second := autocert.DirCache(".")
-	third :=
-
-
-	cache := certcache.NewLayered(autocert.DirCache("."), )
+	cache := certcache.NewLayered(autocert.DirCache("."))
 	certMgr := getCertManager(cache, hostnames...)
 
 	startServer(server, certMgr)

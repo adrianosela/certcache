@@ -32,28 +32,28 @@ const (
 	PolicyWriteShallowFirst = WritePolicy("SHALLOW_FIRST")
 )
 
-// NewCache returns a new layered cache given autocert.Cache implementations
+// NewLayered returns a new layered cache given autocert.Cache implementations
 // this is the default constructor
-func NewCache(layers ...autocert.Cache) *LayeredCache {
+func NewLayered(layers ...autocert.Cache) *LayeredCache {
 	if len(layers) == 0 {
 		return nil
 	}
 	return &LayeredCache{
 		layer:       layers[0],
-		nextLayer:   NewCache(layers[1:]...),
+		nextLayer:   NewLayered(layers[1:]...),
 		writePolicy: PolicyWriteDeepFirst,
 	}
 }
 
-// NewCacheWithPolicy returns a new layered cache and allows the user
+// NewLayeredWithPolicy returns a new layered cache and allows the user
 // to specify the write policy
-func NewCacheWithPolicy(wp WritePolicy, layers ...autocert.Cache) *LayeredCache {
+func NewLayeredWithPolicy(wp WritePolicy, layers ...autocert.Cache) *LayeredCache {
 	if len(layers) == 0 {
 		return nil
 	}
 	return &LayeredCache{
 		layer:       layers[0],
-		nextLayer:   NewCacheWithPolicy(wp, layers[1:]...),
+		nextLayer:   NewLayeredWithPolicy(wp, layers[1:]...),
 		writePolicy: wp,
 	}
 }

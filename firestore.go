@@ -22,12 +22,12 @@ type Firestore struct {
 }
 
 const (
-	defaultCertCacheCollectionName = "certcache"
+	defaultFirestoreCertCacheCollectionName = "certcache"
 )
 
 // NewFirestore is the default constructor for a Firestore CertCache
 func NewFirestore(credsPath, projectID string) *Firestore {
-	return NewFirestoreWithCollection(credsPath, projectID, defaultCertCacheCollectionName)
+	return NewFirestoreWithCollection(credsPath, projectID, defaultFirestoreCertCacheCollectionName)
 }
 
 // NewFirestoreWithCollection is a constructor for a FirestoreCertCache

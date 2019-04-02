@@ -16,7 +16,7 @@ The [autocert](https://godoc.org/golang.org/x/crypto/acme/autocert) package prov
 ## Cache Implementations:
 *  [Firestore](https://godoc.org/github.com/adrianosela/certcache#Firestore) - if you are looking for quick and easy
 *  [MongoDB](https://godoc.org/github.com/adrianosela/certcache#MongoDB) - when flexibility and robustness are important
-*  [DynamoDB](https://godoc.org/github.com/adrianosela/certcache#DynamoDB) - if your infra lives in AWS **(coming soon)**
+*  [DynamoDB](https://godoc.org/github.com/adrianosela/certcache#DynamoDB) - if your infra lives in AWS
 *  [S3](https://godoc.org/github.com/adrianosela/certcache#S3) - throw those certs in a bucket
 
 ---

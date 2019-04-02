@@ -1,11 +1,9 @@
-# <center>SSL Certificates Storage</center>
+# SSL Certificates Storage
 
-<center>
 [![Go Report Card](https://goreportcard.com/badge/github.com/adrianosela/certcache)](https://goreportcard.com/report/github.com/adrianosela/certcache)
 [![Documentation](https://godoc.org/github.com/adrianosela/certcache?status.svg)](https://goreportcard.com/badge/github.com/adrianosela/certcache)
 [![GitHub issues](https://img.shields.io/github/issues/yangwenmai/how-to-add-badge-in-github-readme.svg)](https://goreportcard.com/badge/github.com/adrianosela/certcache/issues)
 [![license](https://img.shields.io/github/license/yangwenmai/how-to-add-badge-in-github-readme.svg)](https://github.com/yangwenmai/how-to-add-badge-in-github-readme/LICENSE)
-</center>
 
 ### Go tools for managing SSL certificates from acme/autocert
 

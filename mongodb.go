@@ -15,8 +15,8 @@ import (
 	"gopkg.in/mgo.v2/bson"
 )
 
-// Mongo represents a MongoDB implementation of autocert.Cache
-type Mongo struct {
+// MongoDB represents a MongoDB implementation of autocert.Cache
+type MongoDB struct {
 	conn     *mongo.Database
 	ctxt     context.Context
 	collname string
@@ -34,9 +34,9 @@ const (
 	defaultMongoCertCacheTimeout        = time.Second * 10
 )
 
-// NewMongo returns a Mongo cache given a mongodb connection string
+// NewMongoDB returns a Mongo cache given a mongodb connection string
 // e.g. fmt.Sprintf("mongodb://%s:%s@%s/%s", username, password, host, db)
-func NewMongo(uri string) *Mongo {
+func NewMongoDB(uri string) *MongoDB {
 	if uri == "" {
 		log.Fatalf("failed to connect to Mongo. Must specify connection string")
 	}
@@ -51,7 +51,7 @@ func NewMongo(uri string) *Mongo {
 	if err = client.Ping(ctxt, readpref.Primary()); err != nil {
 		log.Fatalf("failed to reach Mongo server: %s", err)
 	}
-	return &Mongo{
+	return &MongoDB{
 		ctxt:     ctxt,
 		conn:     client.Database(defaultMongoCertCacheDBName),
 		collname: defaultMongoCertCacheCollectionName,
@@ -61,7 +61,7 @@ func NewMongo(uri string) *Mongo {
 
 // Get returns a certificate data for the specified key.
 // If there's no such key, Get returns ErrCacheMiss.
-func (mgo *Mongo) Get(ctx context.Context, key string) ([]byte, error) {
+func (mgo *MongoDB) Get(ctx context.Context, key string) ([]byte, error) {
 	var d doc
 	err := mgo.conn.Collection(mgo.collname).FindOne(ctx, bson.M{"_id": key}).Decode(&d)
 	if err != nil {
@@ -73,7 +73,7 @@ func (mgo *Mongo) Get(ctx context.Context, key string) ([]byte, error) {
 // Put stores the data in the cache under the specified key.
 // Underlying implementations may use any data storage format,
 // as long as the reverse operation, Get, results in the original data.
-func (mgo *Mongo) Put(ctx context.Context, key string, data []byte) error {
+func (mgo *MongoDB) Put(ctx context.Context, key string, data []byte) error {
 	doc := bson.D{
 		bson.DocElem{Name: "_id", Value: key},
 		bson.DocElem{Name: "data", Value: data},
@@ -86,7 +86,7 @@ func (mgo *Mongo) Put(ctx context.Context, key string, data []byte) error {
 
 // Delete removes a certificate data from the cache under the specified key.
 // If there's no such key in the cache, Delete returns nil.
-func (mgo *Mongo) Delete(ctx context.Context, key string) error {
+func (mgo *MongoDB) Delete(ctx context.Context, key string) error {
 	doc := bson.D{bson.DocElem{Name: "_id", Value: key}}
 	if _, err := mgo.conn.Collection(mgo.collname).DeleteOne(ctx, doc); err != nil {
 		return fmt.Errorf("failed to delete %s from Mongo: %s", key, err)

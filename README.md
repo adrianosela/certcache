@@ -16,16 +16,16 @@ The [autocert](https://godoc.org/golang.org/x/crypto/acme/autocert) package prov
 
 ## Cache Implementations:
 *  [Firestore](https://godoc.org/github.com/adrianosela/certcache#Firestore) - when you want quick and easy
-*  [Dynamo](https://godoc.org/github.com/adrianosela/certcache) - when your infrastructure lives in AWS **(coming soon)**
-*  [Mongo](https://godoc.org/github.com/adrianosela/certcache) - for more robust applications **(coming soon)**
+*  [DynamoDB](https://godoc.org/github.com/adrianosela/certcache#DynamoDB) - when your infrastructure lives in AWS **(coming soon)**
+*  [MongoDB](https://godoc.org/github.com/adrianosela/certcache#MongoDB) - for more robust applications
 
----
+-
 
 #### Why should I use this? Is this for me?
 
 The [default storage](https://godoc.org/golang.org/x/crypto/acme/autocert#DirCache) mechanism used by autocert is the file system. Containerized and virtual workloads often don't have a persistent file system. Furthermore, file system storage is not suitable for servers spanning multiple machines or distributed systems.
 
-See that the [autocert.Cache](https://godoc.org/golang.org/x/crypto/acme/autocert#Cache) interface is what controlls where/how certificates are stored/fetched from: 
+See that the [autocert.Cache](https://godoc.org/golang.org/x/crypto/acme/autocert#Cache) interface is what controlls where/how certificates are stored/fetched from:
 
 ```
 m := autocert.Manager{
@@ -40,4 +40,3 @@ I have implemented the [autocert.Cache](https://godoc.org/golang.org/x/crypto/ac
 #### But wait, why can't I just get a new certificate every time I deploy?
 
 Unless you have a corporate deal with Lets Encrypt, you are [limited](https://letsencrypt.org/docs/rate-limits/) to 5 duplicate certificates (certificates for the same set of names) per week on a rolling basis. This means that if your deployments don't have persistent storage, you can only deploy 5 different times (or even less if your deployments span multiple machines) within a week!
-

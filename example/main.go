@@ -1,9 +1,11 @@
 package main
 
 import (
+	"context"
 	"crypto/tls"
 	"log"
 	"net/http"
+	"os"
 	"time"
 
 	"github.com/adrianosela/certcache"
@@ -50,6 +52,25 @@ func getCertManager(cache autocert.Cache, hostnames ...string) *autocert.Manager
 	}
 }
 
+// getLoggerLayer is an example of what kind of clever things
+// can be done using the certcache.Functional type
+func getLoggerLayer() *certcache.Functional {
+	return certcache.NewFunctional(
+		func(ctx context.Context, key string) ([]byte, error) {
+			log.Printf("[certcache] getting key %s", key)
+			return nil, autocert.ErrCacheMiss
+		},
+		func(ctx context.Context, key string, data []byte) error {
+			log.Printf("[certcache] putting key %s", key)
+			return nil
+		},
+		func(ctx context.Context, key string) error {
+			log.Printf("[certcache] deleting key %s", key)
+			return nil
+		},
+	)
+}
+
 func main() {
 	hostnames := []string{
 		/* YOUR DOMAIN HERE (remove the example) */
@@ -61,7 +82,11 @@ func main() {
 		w.Write([]byte("server up and running!"))
 	}))
 
-	cache := certcache.NewLayered(autocert.DirCache("."))
+	firstLayer := getLoggerLayer()
+	secondLayer := autocert.DirCache(".")
+	thirdLayer := certcache.NewFirestore(os.Getenv("FIRESTORE_CREDS_PATH"), os.Getenv("FIRESTORE_PROJ_ID"))
+
+	cache := certcache.NewLayered(firstLayer, secondLayer, thirdLayer)
 	certMgr := getCertManager(cache, hostnames...)
 
 	startServer(server, certMgr)

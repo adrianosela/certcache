@@ -4,7 +4,6 @@
 [![Documentation](https://godoc.org/github.com/adrianosela/certcache?status.svg)](https://godoc.org/github.com/adrianosela/certcache)
 [![GitHub issues](https://img.shields.io/github/issues/adrianosela/certcache.svg)](https://github.com/adrianosela/certcache/issues)
 [![license](https://img.shields.io/github/license/yangwenmai/how-to-add-badge-in-github-readme.svg)](https://github.com/adrianosela/certcache/blob/master/LICENSE)
-</center>
 
 ### Go tools for managing SSL certificates from acme/autocert
 
@@ -15,9 +14,10 @@ The [autocert](https://godoc.org/golang.org/x/crypto/acme/autocert) package prov
 * [Functional](https://godoc.org/github.com/adrianosela/certcache#Functional) - define an autocert.Cache by using anonymous functions
 
 ## Cache Implementations:
-*  [Firestore](https://godoc.org/github.com/adrianosela/certcache#Firestore) - when you want quick and easy
-*  [DynamoDB](https://godoc.org/github.com/adrianosela/certcache#DynamoDB) - when your infrastructure lives in AWS **(coming soon)**
-*  [MongoDB](https://godoc.org/github.com/adrianosela/certcache#MongoDB) - for more robust applications
+*  [Firestore](https://godoc.org/github.com/adrianosela/certcache#Firestore) - if you are looking for quick and easy
+*  [MongoDB](https://godoc.org/github.com/adrianosela/certcache#MongoDB) - when flexibility and robustness are important
+*  [DynamoDB](https://godoc.org/github.com/adrianosela/certcache#DynamoDB) - if your infra lives in AWS **(coming soon)**
+*  [S3](https://godoc.org/github.com/adrianosela/certcache#S3) - throw those certs in a bucket **(coming soon)**
 
 ---
 

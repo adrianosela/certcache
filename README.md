@@ -19,8 +19,7 @@ The [autocert](https://godoc.org/golang.org/x/crypto/acme/autocert) package prov
 *  [Dynamo](https://godoc.org/github.com/adrianosela/certcache) - when your infrastructure lives in AWS **(coming soon)**
 *  [Mongo](https://godoc.org/github.com/adrianosela/certcache) - for more robust applications **(coming soon)**
 
-
--
+---
 
 #### Why should I use this? Is this for me?
 

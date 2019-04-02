@@ -10,20 +10,16 @@ import (
 	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/dynamodb"
-	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
 	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbiface"
 	"golang.org/x/crypto/acme/autocert"
 )
 
 // DynamoDB represents a DynamoDB implementation of autocert.Cache
 type DynamoDB struct {
-	client     dynamodbiface.DynamoDBAPI
-	table      string
-	priKeyname string
-}
-
-type obj struct {
-	Data string `json:"Data"`
+	client      dynamodbiface.DynamoDBAPI
+	table       string
+	priKeyname  string // key
+	dataKeyname string // data
 }
 
 const (
@@ -66,11 +62,8 @@ func (ddb *DynamoDB) Get(ctx context.Context, key string) ([]byte, error) {
 	if _, ok := result.Item[ddb.priKeyname]; !ok {
 		return nil, autocert.ErrCacheMiss
 	}
-	var o obj
-	if err = dynamodbattribute.UnmarshalMap(result.Item, &o); err != nil {
-		return nil, fmt.Errorf("could not unmarshal object %s: %s", key, err)
-	}
-	return []byte(o.Data), nil
+	data := *result.Item[ddb.dataKeyname].S
+	return []byte(data), nil
 }
 
 // Put stores the data in the cache under the specified key.
@@ -80,7 +73,8 @@ func (ddb *DynamoDB) Put(ctx context.Context, key string, data []byte) error {
 	if _, err := ddb.client.PutItem(&dynamodb.PutItemInput{
 		TableName: aws.String(ddb.table),
 		Item: map[string]*dynamodb.AttributeValue{
-			ddb.priKeyname: {S: aws.String(string(data))},
+			ddb.priKeyname:  {S: aws.String(key)},
+			ddb.dataKeyname: {S: aws.String(string(data))},
 		},
 	}); err != nil {
 		return fmt.Errorf("could not store object %s: %s", key, err)

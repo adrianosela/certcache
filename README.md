@@ -9,6 +9,8 @@
 
 The [autocert](https://godoc.org/golang.org/x/crypto/acme/autocert) package provides automatic access to certificates from Let's Encrypt and any other ACME-based CA. This repository contains a collection of tools to simplify the task of managing certificates acquired through this method.
 
+Want to have SSL and don't know where to start => Check out the [sslmgr](https://godoc.org/github.com/adrianosela/sslmgr) package
+
 ## Tools:
 * [LayeredCache](https://godoc.org/github.com/adrianosela/certcache#LayeredCache) - chain autocert.Cache implementations
 * [Functional](https://godoc.org/github.com/adrianosela/certcache#Functional) - define an autocert.Cache by using anonymous functions

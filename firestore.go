@@ -76,9 +76,14 @@ func (fcc *Firestore) Get(ctx context.Context, key string) ([]byte, error) {
 // Underlying implementations may use any data storage format,
 // as long as the reverse operation, Get, results in the original data.
 func (fcc *Firestore) Put(ctx context.Context, key string, data []byte) error {
+	log.Println(fmt.Sprintf("[firestore-certcache] storing %s in firestore", key))
 	newDocRef := fcc.client.Collection(fcc.collectionName).Doc(key)
-	_, err := newDocRef.Create(fcc.ctxt, format{Data: string(data)})
-	return err
+	if _, err := newDocRef.Set(fcc.ctxt, format{Data: string(data)}); err != nil {
+		log.Println(fmt.Sprintf("[firestore-certcache] failed to store %s in firestore", key))
+		return err
+	}
+	log.Println(fmt.Sprintf("[firestore-certcache] successfully stored %s in firestore", key))
+	return nil
 }
 
 // Delete removes a certificate data from the cache under the specified key.

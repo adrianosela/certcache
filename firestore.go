@@ -5,6 +5,7 @@ package certcache
 
 import (
 	"context"
+	"fmt"
 	"log"
 
 	"cloud.google.com/go/firestore"
@@ -53,8 +54,10 @@ type format struct {
 // Get returns a certificate data for the specified key.
 // If there's no such key, Get returns ErrCacheMiss.
 func (fcc *Firestore) Get(ctx context.Context, key string) ([]byte, error) {
+	log.Println(fmt.Sprintf("[firestore-certcache] fetching %s from firestore", key))
 	docSnapshot, err := fcc.client.Collection(fcc.collectionName).Doc(key).Get(fcc.ctxt)
 	if err != nil {
+		log.Println(fmt.Sprintf("[firestore-certcache] error fetching %s from firestore: %s", key, err))
 		if grpc.Code(err) == codes.NotFound {
 			return nil, autocert.ErrCacheMiss
 		}
@@ -62,8 +65,10 @@ func (fcc *Firestore) Get(ctx context.Context, key string) ([]byte, error) {
 	}
 	var doc format
 	if err := docSnapshot.DataTo(&doc); err != nil {
+		log.Println(fmt.Sprintf("[firestore-certcache] error reading document snapshot for %s: %s", key, err))
 		return nil, err
 	}
+	log.Println(fmt.Sprintf("[firestore-certcache] fetched %s from firestore", key))
 	return []byte(doc.Data), nil
 }
 
